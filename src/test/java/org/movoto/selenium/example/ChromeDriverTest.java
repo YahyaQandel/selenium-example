@@ -12,12 +12,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -35,7 +37,7 @@ public class ChromeDriverTest {
                 "webdriver.chrome.driver",
                 "webdriver/chromedriver");
 
-        testUrl = "https://leftstick.github.io/";
+        testUrl = "https://web.vodafone.com.eg/ar/home";
 
         // Create a new instance of the Chrome driver
         // Notice that the remainder of the code relies on the interface,
@@ -43,7 +45,7 @@ public class ChromeDriverTest {
         driver = new ChromeDriver();
 
         //maximize window
-        driver.manage().window().maximize();
+//        driver.manage().window().maximize();
 
         // And now use this to visit myBlog
         // Alternatively the same thing can be done like this
@@ -55,21 +57,32 @@ public class ChromeDriverTest {
     public void testTitle() throws IOException {
 
         // Find elements by attribute lang="READ_MORE_BTN"
-        List<WebElement> elements = driver
-                .findElements(By.cssSelector("[lang=\"READ_MORE_BTN\"]"));
-
+        List<WebElement> loginLayoutBtn = driver
+                .findElements(By.id("innerLoginBtn"));
         //Click the selected button
-        elements.get(0).click();
+        loginLayoutBtn.get(0).click();
+
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        WebElement loginNumberField = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("loginNum")));
+
+        loginNumberField.sendKeys("01090614633");
 
 
-        assertTrue("The page title should be chagned as expected",
-                (new WebDriverWait(driver, 5))
-                        .until(new ExpectedCondition<Boolean>() {
-                            public Boolean apply(WebDriver d) {
-                                return d.getTitle().equals("我眼中软件工程人员该有的常识");
-                            }
-                        })
-        );
+        WebElement loginPasswordField = driver
+                .findElements(By.id("loginPassword")).get(0);
+        loginPasswordField.sendKeys("oNe_status_1");
+//
+        WebElement loginBtn = driver
+                .findElements(By.id("loginButton")).get(0);
+        loginBtn.click();
+
+
+        WebElement accountHeadingTitle = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.className("service-selector__active-heading")));
+        String AccountHeadingTitle = accountHeadingTitle.getText();
+        assertTrue(AccountHeadingTitle.contains("Yahya"));
+        assertTrue(AccountHeadingTitle.contains("01090614633"));
 
     }
 
