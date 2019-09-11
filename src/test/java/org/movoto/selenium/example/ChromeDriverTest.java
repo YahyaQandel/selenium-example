@@ -22,30 +22,13 @@ public class ChromeDriverTest {
 
     public static final String ACCOUNT_USERNAME = "Yahya";
     public static final String ACCOUNT_PHONENUMBER = "01090614633";
-    private String testUrl;
+    private static final String VODAFONE_TEST_URL = "https://web.vodafone.com.eg/ar/home";
     private WebDriver driver;
 
     @Before
     public void prepare() {
-        //setup chromedriver
-        System.setProperty(
-                "webdriver.chrome.driver",
-                "webdriver/chromedriver");
-
-        testUrl = "https://web.vodafone.com.eg/ar/home";
-
-        // Create a new instance of the Chrome driver
-        // Notice that the remainder of the code relies on the interface,
-        // not the implementation.
         driver = new ChromeDriver();
-
-        //maximize window
-//        driver.manage().window().maximize();
-
-        // And now use this to visit myBlog
-        // Alternatively the same thing can be done like this
-        // driver.navigate().to(testUrl);
-        driver.get(testUrl);
+        driver.get(VODAFONE_TEST_URL);
     }
 
     @Test
@@ -57,7 +40,6 @@ public class ChromeDriverTest {
         assertAccountLoginDetailsAreExists(AccountHeadingTitle);
 
     }
-
     private void loginToAccount() {
         WebElement loginNumberField = waitForElementToBeVisible(By.id("loginNum"));
         loginNumberField.sendKeys("01090614633");
@@ -66,17 +48,14 @@ public class ChromeDriverTest {
         WebElement loginBtn = waitForElementToBeVisible(By.id("loginButton"));
         loginBtn.click();
     }
-
     private void openLoginLayout() {
         WebElement loginLayoutBtn = waitForElementToBeVisible(By.id("innerLoginBtn"));
         loginLayoutBtn.click();
     }
-
     private void assertAccountLoginDetailsAreExists(String accountHeadingTitle) {
         assertTrue(accountHeadingTitle.contains(ACCOUNT_USERNAME));
         assertTrue(accountHeadingTitle.contains(ACCOUNT_PHONENUMBER));
     }
-
     private WebElement waitForElementToBeVisible(By selector) {
         WebDriverWait wait = new WebDriverWait(driver, 20);
         return wait.until(
