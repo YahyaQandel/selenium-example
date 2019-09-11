@@ -2,6 +2,11 @@
 
 #maven
 target
+selenium-example.iml
+
+# ignored tests
+src/test/java/org/movoto/selenium/example/FirefoxTest.java
+src/test/java/org/movoto/selenium/example/SafariTest.java
 
 #mac
 .DS_Store
